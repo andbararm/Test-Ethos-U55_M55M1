@@ -1,0 +1,29 @@
+build-idx:
+  generated-by: csolution version 2.15.1+p3-gf46d68bf
+  target: NuMaker-M55M1
+  description: TensorFlow Lite Micro on Ethos-U55, running as an integration test on the Corstone-300 FVP
+  cdefault: cdefault.yml
+  csolution: Test-Ethos-U55.csolution.yml
+  cbuild-run: out/Test-Ethos-U55+NuMaker-M55M1.cbuild-run.yml
+  tmpdir: tmp/NuMaker-M55M1/default
+  cprojects:
+    - cproject: Test-Ethos-U.cproject.yml
+      clayers:
+        - clayer: $SolutionDir()$/Model/ML-MyModels.clayer.yml
+        - clayer: $Board-Layer$
+  cbuilds:
+    - cbuild: out/Test-Ethos-U/NuMaker-M55M1/Debug/Test-Ethos-U.Debug+NuMaker-M55M1.cbuild.yml
+      project: Test-Ethos-U
+      configuration: .Debug+NuMaker-M55M1
+      clayers:
+        - clayer: Board/NuMaker-X-M55M1D/Board-U55.clayer.yml
+        - clayer: Model/ML-MyModels.clayer.yml
+      messages:
+        info:
+          - Test-Ethos-U55.cbuild-pack.yml - file is already up-to-date
+          - Test-Ethos-U55+NuMaker-M55M1.cbuild-run.yml - file generated successfully
+          - Test-Ethos-U55.cbuild-mlops.yml - file is already up-to-date
+          - Test-Ethos-U.Debug+NuMaker-M55M1.cbuild.yml - file is already up-to-date
+      packs-unused:
+        - pack: ARM::CMSIS-Compiler@2.3.0
+        - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0

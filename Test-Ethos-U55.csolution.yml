@@ -1,0 +1,82 @@
+solution:
+  description: TensorFlow Lite Micro on Ethos-U55, running as an integration test
+    on the Corstone-300 FVP
+  created-for: CMSIS-Toolbox@2.14.0
+  cdefault:
+
+  select-compiler:
+    - compiler: AC6
+    - compiler: GCC
+
+  compiler: AC6
+
+  packs:
+    - pack: Nuvoton::NuMicroM55_DFP@^3.1.5
+    - pack: Nuvoton::NuMicro_M55M1_BSP
+
+    - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
+    - pack: ARM::CMSIS
+
+  target-types:
+    - type: NuMaker-M55M1
+      board: Nuvoton::NuMaker-X-M55M1D
+      device: Nuvoton::M55M1H2LJAE
+      variables:
+        - Board-Layer: ./Board/NuMaker-X-M55M1D/Board-U55.clayer.yml
+      target-set:
+        - set:
+          images:
+            - project-context: Test-Ethos-U.Debug
+          debugger:
+            name: Nu-Link@pyOCD
+            clock: 10000000
+            protocol: swd
+
+    - type: SSE-300-U55
+      board: ARM::V2M-MPS3-SSE-300-FVP
+      device: ARM::SSE-300-MPS3
+      variables:
+        - Board-Layer: ./Board/Corstone-300/Board-U55.clayer.yml
+      target-set:
+        - set:
+          debugger:
+            name: Arm-FVP
+            model: FVP_Corstone_SSE-300_Ethos-U55
+            config-file: ./Board/Corstone-300/fvp_config_u55.txt
+            args: ""
+          images:
+            - project-context: Test-Ethos-U.Debug
+    - type: SSE-300-MPS3
+      device: SSE-300-MPS3
+      board: V2M-MPS3-SSE-300-FVP
+      target-set:
+        - set:
+          images:
+            - project-context: Test-Ethos-U.Debug
+
+  build-types:
+    - type: Debug
+      debug: on
+      optimize: debug
+
+    - type: Release
+      debug: off
+      optimize: balanced
+
+  projects:
+    - project: ./Test-Ethos-U.cproject.yml
+
+  mlops:
+    description: LiteRT example models for Ethos-U55
+    npu:
+      type: Ethos-U55
+      macs: 256
+    vela:
+      system: Ethos_U55_High_End_Embedded
+      memory: Shared_Sram
+    model:
+      dir: ./Model
+      list: models.yml
+
+#   simulator:
+#     target-type: SSE-300-U55

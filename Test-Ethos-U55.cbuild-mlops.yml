@@ -1,0 +1,28 @@
+cbuild-mlops:
+  generated-by: csolution version 2.15.1+p3-gf46d68bf
+  description: LiteRT example models for Ethos-U55
+  processor:
+    type: Cortex-M55
+  npu:
+    type: Ethos-U55
+    macs: 256
+  vela:
+    ini: .cmsis/default_vela.ini
+    options: --accelerator-config ethos-u55-256 --system-config Ethos_U55_High_End_Embedded --memory-mode Shared_Sram
+  model:
+    dir: ./Model
+    list: models.yml
+  hardware:
+    active: NuMaker-M55M1
+    cbuild-run: out/Test-Ethos-U55+NuMaker-M55M1.cbuild-run.yml
+    output:
+      - file: out/Test-Ethos-U/NuMaker-M55M1/Debug/Test-Ethos-U.axf
+        type: elf
+  simulator:
+    active: SSE-300-U55
+    cbuild-run: out/Test-Ethos-U55+SSE-300-U55.cbuild-run.yml
+    output:
+      - file: out/Test-Ethos-U/SSE-300-U55/Debug/Test-Ethos-U.axf
+        type: elf
+    model: FVP_Corstone_SSE-300_Ethos-U55
+    config-file: Board/Corstone-300/fvp_config_u55.txt

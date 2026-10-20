@@ -1,0 +1,60 @@
+layer:
+  type: Board
+  description: Base configuration of NuMaker-X-M55M1D with Ethos U55
+  for-board: Nuvoton::NuMaker-X-M55M1D
+  for-device: Nuvoton::M55M1H2LJAE
+
+  connections:
+    - connect: Board Interfaces
+      provides:
+        - CMSIS_USART
+        - CMSIS_VIO
+        - STDIN
+        - STDOUT
+        - STDERR
+        - Heap: 98304
+
+  define:
+    - CMSIS_target_header: \"Corstone-300.h\"
+    - ETHOSU_MACS: 256
+
+  packs:
+    - pack: ARM::CMSIS
+    - pack: ARM::CMSIS-Compiler@^2.2.0
+    - pack: ARM::CMSIS-Ethos-U@^1.0.0-0
+    - pack: Nuvoton::NuMicroM55_DFP
+    - pack: Nuvoton::NuMicro_M55M1_BSP
+
+  components:
+    - component: CMSIS:CORE
+
+    - component: CMSIS Driver:USART:M55M1_M5531
+    - component: CMSIS Driver:VIO:Board&NuMaker-X-M55M1D
+
+    - component: Device:Common:M55M1_M5531
+    - component: Device:Startup
+
+    - component: Device:StdDriver:CLK
+    - component: Device:StdDriver:LPUART
+    - component: Device:StdDriver:Retarget
+    - component: Device:StdDriver:SCUART
+    - component: Device:StdDriver:SYS
+    - component: Device:StdDriver:UART
+    - component: Device:StdDriver:USCI_UART
+    - component: Device:StdDriver:LPPDMA
+    - component: Device:StdDriver:PDMA
+
+    - component: Machine Learning:NPU Support:Ethos-U Driver&Generic U55
+    - component: Device:StdDriver:GPIO
+
+  groups:
+    - group: Board
+      files:
+        - file: main.c
+        - file: main.h
+        - file: ethos_setup.c
+        - file: ethosu_os_rtos2.c
+        - file: ethosu_dcache.c
+
+  linker:
+    - script: RTE/Device/M55M1H2LJAE/M55M1.scf
